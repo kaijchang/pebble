@@ -43,6 +43,10 @@
             Object.keys(attributes).forEach(attr => {
                 if (attr === 'className') {
                     el.setAttribute('class', attributes[attr]);
+                } else if (attr === 'style') {
+                   el.setAttribute('style', Object.keys(attributes[attr]).map(style =>
+                       `${style}: ${attributes[attr][style]};`
+                   ).join(''));
                 } else if (/^on[A-Z][a-z]+$/.test(attr)) {
                     el.addEventListener(attr.substring(2).toLowerCase(), attributes[attr]);
                 } else {
