@@ -1,6 +1,6 @@
 {
-  "name": "pebble.js",
-  "version": "1.0.0",
+  "name": "@kachang/pebble.js",
+  "version": "0.1.0",
   "description": "pebble is a tiny component-based Javascript frontend framework, similar to React.",
   "main": "Pebble.js",
   "repository": {

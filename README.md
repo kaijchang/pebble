@@ -64,4 +64,12 @@ App = () => Pebble.createElement('div', {}, [
 Pebble.mount(document.body, Pebble.createElement(App));
 ```
 
+You can install pebble from npm or yarn:
+
+```console
+npm i @kachang/pebble.js
+or
+yarn add @kachang/pebble.js
+```
+
 Thanks to [ofirdagan](https://github.com/ofirdagan/build-your-own-react) for helping me get the basic structure of React.
