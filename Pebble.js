@@ -55,7 +55,7 @@
                     el.appendChild(document.createTextNode(child));
                 } else if (child instanceof Node) {
                     el.appendChild(child);
-                } else if (child.type === 'PEBBLE') {
+                } else if (child.type === PEBBLE) {
                     el.appendChild(child.render());
                 }
             });
@@ -82,7 +82,7 @@
             });
 
             newElement.children = children;
-            newElement.type = 'PEBBLE';
+            newElement.type = PEBBLE;
 
             componentMap[componentCounter] = newElement;
         }
