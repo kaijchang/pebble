@@ -1,0 +1,16 @@
+{
+  "name": "pebble.js",
+  "version": "1.0.0",
+  "description": "pebble is a tiny component-based Javascript frontend framework, similar to React.",
+  "main": "Pebble.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kajchang/pebble.git"
+  },
+  "author": "Kai Chang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kajchang/pebble/issues"
+  },
+  "homepage": "https://github.com/kajchang/pebble#readme"
+}
