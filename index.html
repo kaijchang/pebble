@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pebble Example</title>
+    <script src="pebble.js"></script>
+</head>
+<body>
+    <script>
+        class Timer extends Pebble.Component {
+            constructor() {
+                super();
+
+                this.state = {
+                    time: 0
+                };
+
+                setInterval(() => this.setState({
+                    time: this.state.time + 1
+                }), 1000);
+            }
+
+            render() {
+                return Pebble.createElement('span', [], [
+                    'Pebble Timer',
+                    Pebble.createElement('br'),
+                    `${ this.state.time } Second${ this.state.time === 1 ? '' : 's' }`
+                ]);
+            }
+        }
+
+        Pebble.mount(document.body, new Timer);
+    </script>
+</body>
+</html>

@@ -54,7 +54,12 @@
 
         function updateEvent() {
             mountNode.innerHTML = '';
-            mountNode.appendChild(component.render());
+
+            const res = component.render();
+
+            if (!res instanceof Node) throw new Error('The return of the render function must be a Component');
+
+            mountNode.appendChild(res);
         }
 
         component.setUpdateEvent(updateEvent);
