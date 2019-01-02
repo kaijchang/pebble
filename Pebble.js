@@ -34,22 +34,28 @@
         let el;
 
         if (!Array.isArray(children)) {
-            children = [children]
+            children = [children];
         }
 
         if (typeof element === 'string') {
             el = document.createElement(element);
 
-            Object.keys(attributes).forEach(attr =>
-                el.setAttribute(attr, attributes[attr])
-            );
+            Object.keys(attributes).forEach(attr => {
+                if (attr === 'className') {
+                    el.setAttribute('class', attributes[attr]);
+                } else if (/^on[A-Z][a-z]+$/.test(attr)) {
+                    el.addEventListener(attr.substring(2).toLowerCase(), attributes[attr]);
+                } else {
+                    el.setAttribute(attr, attributes[attr])
+                }
+            });
 
             children.forEach(child => {
                 if (typeof child === 'string' || typeof child === 'number') {
                     el.appendChild(document.createTextNode(child));
                 } else if (child instanceof Node) {
                     el.appendChild(child);
-                } else if (child.type === PEBBLE) {
+                } else if (child.type === 'PEBBLE') {
                     el.appendChild(child.render());
                 }
             });
@@ -67,8 +73,6 @@
         componentCounter++;
 
         if (!componentMap[componentCounter]) {
-            attributes.children = children;
-
             const newElement = new component(attributes);
 
             children.forEach(child => {
@@ -78,12 +82,19 @@
             });
 
             newElement.children = children;
-            newElement.type = PEBBLE;
+            newElement.type = 'PEBBLE';
 
             componentMap[componentCounter] = newElement;
         }
 
         return componentMap[componentCounter];
+    }
+
+    function mount(mountNode, componentElement) {
+        root = mountNode;
+        rootComponent = componentElement;
+
+        render();
     }
 
     function render() {
@@ -104,13 +115,6 @@
         } else {
             componentCounter = 0;
         }
-
-        render();
-    }
-
-    function mount(mountNode, componentElement) {
-        root = mountNode;
-        rootComponent = componentElement;
 
         render();
     }
