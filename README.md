@@ -23,7 +23,7 @@ class Timer extends Pebble.Component {
     }
 
     render() {
-        return Pebble.createElement('span', {}, [
+        return Pebble.createElement('div', {}, [
             `Pebble Timer #${ this.props.number }`,
             Pebble.createElement('br'),
             `${ this.state.time } Second${ this.state.time === 1 ? '' : 's' }`
@@ -31,19 +31,17 @@ class Timer extends Pebble.Component {
     }
 }
 
-class App extends Pebble.Component {
-    render() {
-        return Pebble.createElement('div', {}, [
-            Pebble.createElement(Timer, {
-                number: 1
-            }),
-            Pebble.createElement('br'),
-            Pebble.createElement(Timer, {
-                number: 2
-            })
-        ]);
-    }
-}
+App = () => Pebble.createElement('div', {}, [
+    Pebble.createElement(Timer, {
+        number: 1
+    }),
+    Pebble.createElement(Timer, {
+        number: 2
+    }),
+    Pebble.createElement(Timer, {
+        number: 3
+    })
+]);
 
 Pebble.mount(document.body, Pebble.createElement(App));
 ```
