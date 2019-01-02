@@ -10,8 +10,9 @@
     let root, rootComponent;
 
     let componentCounter = 0;
-
     let componentMap = [];
+
+    const PEBBLE = 'PEBBLE';
 
     class Component {
         constructor(props) {
@@ -32,12 +33,22 @@
     function createElement(element, attributes = {}, children = []) {
         let el;
 
+        if (!Array.isArray(children)) {
+            children = [children];
+        }
+
         if (typeof element === 'string') {
             el = document.createElement(element);
 
-            Object.keys(attributes).forEach(attr =>
-                el.setAttribute(attr, attributes[attr])
-            );
+            Object.keys(attributes).forEach(attr => {
+                if (attr === 'className') {
+                    el.setAttribute('class', attributes[attr]);
+                } else if (/^on[A-Z][a-z]+$/.test(attr)) {
+                    el.addEventListener(attr.substring(2).toLowerCase(), attributes[attr]);
+                } else {
+                    el.setAttribute(attr, attributes[attr])
+                }
+            });
 
             children.forEach(child => {
                 if (typeof child === 'string' || typeof child === 'number') {
@@ -50,6 +61,9 @@
             });
         } else if (typeof element === 'function' && /^class\s/.test(Function.prototype.toString.call(element))) {
             el = handleComponent(element, attributes, children);
+        } else if (typeof element === 'function') {
+            attributes.children = children;
+            el = element.bind(element, attributes);
         }
 
         return el;
@@ -86,15 +100,22 @@
     function render() {
         root.innerHTML = '';
 
-        if (rootComponent.type === 'PEBBLE') {
+        if (rootComponent.type === PEBBLE) {
             root.appendChild(rootComponent.render());
+        } else if (typeof rootComponent === 'function') {
+            root.appendChild(rootComponent());
         } else if (rootComponent instanceof Node) {
             root.appendChild(rootComponent);
         }
     }
 
     function reRender() {
-        componentCounter = 1;
+        if (rootComponent.type === PEBBLE) {
+            componentCounter = 1;
+        } else {
+            componentCounter = 0;
+        }
+
         render();
     }
 

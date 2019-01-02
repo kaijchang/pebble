@@ -9,36 +9,54 @@ Here's a [quick example](https://kajchang.github.io/pebble/).
 pebble sports a React-like API:
 
 ```js
-class Timer extends Pebble.Component {
+class Counter extends Pebble.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            time: 0
+            value: 0
         };
 
-        setInterval(() => this.setState({
-            time: this.state.time + 1
-        }), 1000);
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick(event) {
+        if (event.target.name === 'increment') {
+            this.setState({
+                value: this.state.value + 1
+            });
+        } else if (event.target.name === 'decrement') {
+            this.setState({
+                value: this.state.value - 1
+            });
+        }
     }
 
     render() {
         return Pebble.createElement('div', {}, [
-            `Pebble Timer #${ this.props.number }`,
+            `Pebble Counter #${ this.props.number }`,
             Pebble.createElement('br'),
-            `${ this.state.time } Second${ this.state.time === 1 ? '' : 's' }`
+            Pebble.createElement('button', {
+                name: 'decrement',
+                onClick: this.handleClick
+            }, '-'),
+            ` ${ this.state.value } `,
+            Pebble.createElement('button', {
+                name: 'increment',
+                onClick: this.handleClick
+            }, '+')
         ]);
     }
 }
 
 App = () => Pebble.createElement('div', {}, [
-    Pebble.createElement(Timer, {
+    Pebble.createElement(Counter, {
         number: 1
     }),
-    Pebble.createElement(Timer, {
+    Pebble.createElement(Counter, {
         number: 2
     }),
-    Pebble.createElement(Timer, {
+    Pebble.createElement(Counter, {
         number: 3
     })
 ]);
