@@ -10,8 +10,9 @@
     let root, rootComponent;
 
     let componentCounter = 0;
-
     let componentMap = [];
+
+    const PEBBLE = 'PEBBLE';
 
     class Component {
         constructor(props) {
@@ -32,6 +33,10 @@
     function createElement(element, attributes = {}, children = []) {
         let el;
 
+        if (!Array.isArray(children)) {
+            children = [children]
+        }
+
         if (typeof element === 'string') {
             el = document.createElement(element);
 
@@ -44,12 +49,15 @@
                     el.appendChild(document.createTextNode(child));
                 } else if (child instanceof Node) {
                     el.appendChild(child);
-                } else if (child.type === 'PEBBLE') {
+                } else if (child.type === PEBBLE) {
                     el.appendChild(child.render());
                 }
             });
         } else if (typeof element === 'function' && /^class\s/.test(Function.prototype.toString.call(element))) {
             el = handleComponent(element, attributes, children);
+        } else if (typeof element === 'function') {
+            attributes.children = children;
+            el = element.bind(element, attributes);
         }
 
         return el;
@@ -59,6 +67,8 @@
         componentCounter++;
 
         if (!componentMap[componentCounter]) {
+            attributes.children = children;
+
             const newElement = new component(attributes);
 
             children.forEach(child => {
@@ -68,7 +78,7 @@
             });
 
             newElement.children = children;
-            newElement.type = 'PEBBLE';
+            newElement.type = PEBBLE;
 
             componentMap[componentCounter] = newElement;
         }
@@ -76,25 +86,32 @@
         return componentMap[componentCounter];
     }
 
-    function mount(mountNode, componentElement) {
-        root = mountNode;
-        rootComponent = componentElement;
-
-        render();
-    }
-
     function render() {
         root.innerHTML = '';
 
-        if (rootComponent.type === 'PEBBLE') {
+        if (rootComponent.type === PEBBLE) {
             root.appendChild(rootComponent.render());
+        } else if (typeof rootComponent === 'function') {
+            root.appendChild(rootComponent());
         } else if (rootComponent instanceof Node) {
             root.appendChild(rootComponent);
         }
     }
 
     function reRender() {
-        componentCounter = 1;
+        if (rootComponent.type === PEBBLE) {
+            componentCounter = 1;
+        } else {
+            componentCounter = 0;
+        }
+
+        render();
+    }
+
+    function mount(mountNode, componentElement) {
+        root = mountNode;
+        rootComponent = componentElement;
+
         render();
     }
 
