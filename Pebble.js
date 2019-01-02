@@ -7,40 +7,21 @@
         root.Pebble = factory();
     }
 }(this, () => {
-    function createElement(tagName, attributes = [], children = []) {
-        const el = document.createElement(tagName);
+    let root, rootComponent;
 
-        Object.keys(attributes).forEach(attr =>
-            el.setAttribute(attr, attributes[attr])
-        );
+    let componentCounter = 0;
 
-        children.forEach(child => {
-            if (typeof child === 'string' || typeof child === 'number') {
-                el.appendChild(document.createTextNode(child));
-            } else if (child instanceof Node) {
-                el.appendChild(child);
-            } else {
-                throw new TypeError('Child must be String, Number or Node');
-            }
-        });
-
-        return el;
-    }
+    let componentMap = [];
 
     class Component {
-        constructor() {
+        constructor(props) {
+            this.props = props;
             this.state = Object();
         }
 
-        setUpdateEvent(updateEvent) {
-            this.updateEvent = updateEvent;
-        }
-
         setState(newState) {
-            if (this.updateEvent === undefined) throw new Error('Components cannot update state when not mounted');
-
             Object.assign(this.state, newState);
-            this.updateEvent();
+            reRender();
         }
 
         render() {
@@ -48,22 +29,73 @@
         }
     }
 
-    function mount(mountNode, component) {
-        if (!mountNode instanceof Node) throw new Error('mountNode must be a Node');
-        if (!component instanceof Component) throw new Error('component must be a Component');
+    function createElement(element, attributes = {}, children = []) {
+        let el;
 
-        function updateEvent() {
-            mountNode.innerHTML = '';
+        if (typeof element === 'string') {
+            el = document.createElement(element);
 
-            const res = component.render();
+            Object.keys(attributes).forEach(attr =>
+                el.setAttribute(attr, attributes[attr])
+            );
 
-            if (!res instanceof Node) throw new Error('The return of the render function must be a Component');
-
-            mountNode.appendChild(res);
+            children.forEach(child => {
+                if (typeof child === 'string' || typeof child === 'number') {
+                    el.appendChild(document.createTextNode(child));
+                } else if (child instanceof Node) {
+                    el.appendChild(child);
+                } else if (child.type === 'PEBBLE') {
+                    el.appendChild(child.render());
+                }
+            });
+        } else if (typeof element === 'function' && /^class\s/.test(Function.prototype.toString.call(element))) {
+            el = handleComponent(element, attributes, children);
         }
 
-        component.setUpdateEvent(updateEvent);
-        updateEvent();
+        return el;
+    }
+
+    function handleComponent(component, attributes = {}, children = []) {
+        componentCounter++;
+
+        if (!componentMap[componentCounter]) {
+            const newElement = new component(attributes);
+
+            children.forEach(child => {
+                if (typeof child === 'string' || typeof child === 'number') {
+                    child = document.createTextNode(child);
+                }
+            });
+
+            newElement.children = children;
+            newElement.type = 'PEBBLE';
+
+            componentMap[componentCounter] = newElement;
+        }
+
+        return componentMap[componentCounter];
+    }
+
+    function mount(mountNode, componentElement) {
+        root = mountNode;
+        rootComponent = componentElement;
+
+        render();
+    }
+
+    function render() {
+        root.innerHTML = '';
+
+        if (rootComponent.type === 'PEBBLE') {
+            root.appendChild(rootComponent.render());
+        } else if (rootComponent instanceof Node) {
+            root.appendChild(rootComponent);
+        }
+    }
+
+    function reRender() {
+        componentCounter = 1;
+        render();
     }
 
     return {
