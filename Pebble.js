@@ -111,6 +111,8 @@
         } else if (rootComponent instanceof Node) {
             root.appendChild(rootComponent);
         }
+
+        componentMap.splice(componentCounter);
     }
 
     function reRender() {
