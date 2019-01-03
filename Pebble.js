@@ -37,6 +37,10 @@
             children = [children];
         }
 
+        if (attributes === null) {
+            attributes = Object();
+        }
+
         if (typeof element === 'string') {
             el = document.createElement(element);
 
@@ -44,9 +48,13 @@
                 if (attr === 'className') {
                     el.setAttribute('class', attributes[attr]);
                 } else if (attr === 'style') {
-                   el.setAttribute('style', Object.keys(attributes[attr]).map(style =>
-                       `${style}: ${attributes[attr][style]};`
-                   ).join(''));
+                    if (typeof attributes[attr] === 'object') {
+                        el.setAttribute('style', Object.keys(attributes[attr]).map(style =>
+                            `${style}: ${attributes[attr][style]};`
+                        ).join(''));
+                    } else {
+                        el.setAttribute(attr, attributes[attr]);
+                    }
                 } else if (/^on[A-Z][a-z]+$/.test(attr)) {
                     el.addEventListener(attr.substring(2).toLowerCase(), attributes[attr]);
                 } else {
