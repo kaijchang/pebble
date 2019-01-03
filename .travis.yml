@@ -13,7 +13,7 @@ cache:
 
 script:
   - yarn build
-  - sed -i '' '/^App.js$/d' .gitignore
+  - sed -i '/^App.js$/d' .gitignore
 
 deploy:
   provider: pages
