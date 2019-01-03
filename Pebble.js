@@ -30,7 +30,7 @@
         }
     }
 
-    function createElement(element, attributes = {}, children = []) {
+    function createElement(element, attributes = {}, ...children) {
         let el;
 
         if (!Array.isArray(children)) {
