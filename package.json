@@ -5,7 +5,7 @@
     "build": "babel App.jsx > App.js"
   },
   "dependencies": {
-    "@kachang/pebble.js": "^0.2.1"
+    "@kachang/pebble.js": "^0.2.2"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",

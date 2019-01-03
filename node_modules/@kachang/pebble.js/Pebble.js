@@ -84,7 +84,7 @@
     function handleComponent(component, attributes = {}, children = []) {
         componentCounter++;
 
-        if (!componentMap[componentCounter]) {
+        if (!componentMap[componentCounter - 1]) {
             const newElement = new component(attributes);
 
             children.forEach(child => {
@@ -96,10 +96,10 @@
             newElement.children = children;
             newElement.type = PEBBLE;
 
-            componentMap[componentCounter] = newElement;
+            componentMap[componentCounter - 1] = newElement;
         }
 
-        return componentMap[componentCounter];
+        return componentMap[componentCounter - 1];
     }
 
     function mount(mountNode, componentElement) {

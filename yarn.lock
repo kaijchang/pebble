@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@kachang/pebble.js@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@kachang/pebble.js/-/pebble.js-0.2.1.tgz#63b457b226d56670da813f280197482bbcc42228"
-  integrity sha512-G6v1pkxfamkxesm6/owKDoE/3PDO1p/Ye00v+M+Zz6NitVs2rPvnVM9Vf6EvpMmAf/9EttG0TQOvhtYwHqbc0w==
+"@kachang/pebble.js@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@kachang/pebble.js/-/pebble.js-0.2.2.tgz#2738f326e2c0257c9b658043d03cb0ff920a0350"
+  integrity sha512-9DckFdZzxGn2WybCRjI4QeqXeyMozyMgo1+mGcg4mlasyS5M4W/A4f4Ri1U7Bp2MLP4+W5ok0IKdsx1VKRJTmA==
 
 abbrev@1:
   version "1.1.1"
