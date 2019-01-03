@@ -13,6 +13,7 @@ cache:
 
 script:
   - yarn build
+  - rm .gitignore
 
 deploy:
   provider: pages
